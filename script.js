@@ -18,7 +18,7 @@ const __dirname = path.dirname(__filename);
 
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT||4000;
 async function connectDB() {
     try {
         await mongoose.connect("mongodb+srv://mr_unknown:unknown@cluster0.fboxd.mongodb.net/Twitter?retryWrites=true&w=majority&appName=cluster0");
