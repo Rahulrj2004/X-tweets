@@ -44,7 +44,7 @@ log_in.addEventListener("click", async (event) => {
         try {
             const email = l_email.value;
             const password = l_password.value;
-            const response = await fetch("${window.location.origin}/log_in", {
+            const response = await fetch(`${window.location.origin}/log_in`, {
                 method: "Post",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
@@ -97,7 +97,7 @@ sign_up.addEventListener("click", async (event) => {
             formdata.append("email", email);
             formdata.append("pic", pic);
 
-            const dada = await fetch("${window.location.origin}/Sign-in", {
+            const dada = await fetch(`${window.location.origin}/Sign-in`, {
                 method: "Post",
                 body: formdata
             });

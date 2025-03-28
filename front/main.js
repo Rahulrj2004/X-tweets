@@ -15,7 +15,7 @@ let chigger = "chichi";
 
 window.addEventListener("DOMContentLoaded", async (event) => {
     // if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
-    //     window.location.href = "${window.location.origin}/";
+    //     window.location.href = `${window.location.origin}/`;
     // }
     const userID = new URLSearchParams(window.location.search).get("userID");
     if (!userID) {
@@ -225,9 +225,9 @@ async function image_post(postId, chats, repost, likes, views, username) {
 async function loader() {
     try {
         const [postsResponse, seesResponse,Vidresponse] = await Promise.all([
-            fetch("${window.location.origin}/get-posts"),
-            fetch("${window.location.origin}/get-sees"),
-            fetch("${window.location.origin}/get-vids")
+            fetch(`${window.location.origin}/get-posts`),
+            fetch(`${window.location.origin}/get-sees`),
+            fetch(`${window.location.origin}/get-vids`)
         ]);
 
         const posts = await postsResponse.json();
@@ -291,7 +291,7 @@ write1.addEventListener("keydown", async function (event) {
 
 
         try {
-            await fetch("${window.location.origin}/write-post", {
+            await fetch(`${window.location.origin}/write-post`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(postData)
@@ -356,7 +356,7 @@ img_post1.addEventListener("click", async function () {
     img_post1.innerText = "Uploading...";
 
     try {
-        const response = await fetch("${window.location.origin}/upload", {
+        const response = await fetch(`${window.location.origin}/upload`, {
             method: "POST",
             body: formData
         });
