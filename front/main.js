@@ -50,17 +50,17 @@ async function written_post(data, chats, repost, likes, views, profileId, userna
 
     const profile = `data:${data1.contentType};base64,${data1.profile}`;
 
-    let html = ` <div class="written_post flex gap-2 border border-x-0 border-gray-600 ">
-                    <div class="account my-2">
-                        <img src="${profile}" class="rounded-full w-10 h-10 mx-5" alt="">
+    let html = ` <div class="written_post flex border border-x-0 border-gray-600 ">
+                    <div class="account my-2 max-sm:w-11">
+                        <img src="${profile}" class="rounded-full w-10 h-10 mx-5 max-sm:w-8 max-sm:h-8 max-sm:mx-3" alt="">
                     </div>
                     <div class="mx-5">
-                        <div class="my-3">
-                            <span class="font-bold hover:underline text-sm cursor-pointer">${username}
+                        <div>
+                            <span class="font-bold hover:underline my-2 text-sm cursor-pointer">${username}
                             </span>
                             <div class="text-sm">poet</div>
                         </div>
-                        <div class="thought w-[450px]">
+                        <div class="thought my-2 flex justify-start">
                             ${data}
                         </div>
                         <div class="icons flex gap-8 text-sm m-3">
@@ -115,13 +115,13 @@ async function video_post(chats, repost, likes, views, profileId, username) {
 
     const profile = `data:${data3.contentType};base64,${data3.profile}`;
 
-    let html = ` <div class="written_post flex gap-2 border border-x-0 border-gray-600 ">
-                    <div class="account my-2">
-                        <img src="${profile}" class="rounded-full w-10 h-10 mx-5" alt="">
+    let html = ` <div class=" flex border border-x-0 border-gray-600 ">
+                    <div class="account my-2 max-sm:w-11">
+                        <img src="${profile}" class="rounded-full w-10 h-10 mx-5 max-sm:w-8 max-sm:h-8 max-sm:mx-3" alt="">
                     </div>
                     <div class="mx-5">
-                        <div class="my-3">
-                            <span class="font-bold hover:underline text-sm cursor-pointer">${username}
+                        <div>
+                            <span class="font-bold hover:underline my-2 text-sm cursor-pointer">${username}
                             </span>
                             <div class="text-sm">poet</div>
                         </div>
