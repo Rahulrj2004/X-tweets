@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../front/style.css">
+    <title>Login-in</title>
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form action="/Sign-in" enctype="multipart/form-data">
+                <h1>Create Account</h1>
+                <label for="profile_input">
+                    <img src="../public/profile_placeholder.jpg" id="profile" alt="">
+                </label>
+                <input type="file" id="profile_input" name="pic" onchange="getImage(this);">
+                <input type="text" placeholder="Username" id="s_username">
+                <input type="email" placeholder="Email" id="s_email">
+                <input type="password" placeholder="Password" id="s_password">
+                <button id="sign_up">Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form>
+                <h1>Log In</h1>
+                <br>
+                <br>
+                <br>
+                <input type="email" placeholder="Email" id="l_email">
+                <input type="password" placeholder="Password" id="l_password">
+                <a href="#">Forget Your Password?</a>
+                <button id="log_in">Log In</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle" id="toggle-box">
+                <div class="toggle-panel toggle-left">
+                    <h1>Already a User</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="login">Log In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>New User</h1>
+                    <p>then register here to view our page</p>
+                    <button class="hidden" id="register">Sign in</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../front/main2.js"></script>
+</body>
+
+</html>
