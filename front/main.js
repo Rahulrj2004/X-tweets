@@ -15,7 +15,7 @@ let chigger = "chichi";
 
 window.addEventListener("DOMContentLoaded", async (event) => {
     // if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
-    //     window.location.href = "http://localhost:4000/";
+    //     window.location.href = "${window.location.origin}/";
     // }
     const userID = new URLSearchParams(window.location.search).get("userID");
     if (!userID) {
@@ -23,7 +23,7 @@ window.addEventListener("DOMContentLoaded", async (event) => {
         return;
     }
     try {
-        const response = await fetch(`http://localhost:4000/get-profile/${userID}`);
+        const response = await fetch(`${window.location.origin}/get-profile/${userID}`);
         const data = await response.json();
         if (response.ok) {
             profile_pic.src = data.image;
@@ -40,7 +40,7 @@ window.addEventListener("DOMContentLoaded", async (event) => {
 });
 
 async function written_post(data, chats, repost, likes, views, profileId, username) {
-    const response1 = await fetch(`http://localhost:4000/profile/${profileId}`);
+    const response1 = await fetch(`${window.location.origin}/profile/${profileId}`);
     const data1 = await response1.json();
 
     if (!data1 || !data1.profile) {
@@ -96,7 +96,7 @@ async function written_post(data, chats, repost, likes, views, profileId, userna
 }
 
 async function video_post(chats, repost, likes, views, profileId, username) {
-    const response3 = await fetch(`http://localhost:4000/Vprofile/${profileId}`);
+    const response3 = await fetch(`${window.location.origin}/Vprofile/${profileId}`);
     const data3 = await response3.json();
 
     if (!data3 || !data3.profile || !data3.filename) {
@@ -104,7 +104,7 @@ async function video_post(chats, repost, likes, views, profileId, username) {
         return;
     }
 
-    const vresponse = await fetch(`http://localhost:4000/video/${data3.filename}`);
+    const vresponse = await fetch(`${window.location.origin}/video/${data3.filename}`);
     if (!vresponse.ok) {
         console.error("❌ Video not found on server:", data3.filename);
         return;
@@ -162,7 +162,7 @@ async function video_post(chats, repost, likes, views, profileId, username) {
 
 
 async function image_post(postId, chats, repost, likes, views, username) {
-    const response = await fetch(`http://localhost:4000/image/${postId}`);
+    const response = await fetch(`${window.location.origin}/image/${postId}`);
     const data = await response.json();
 
 
@@ -225,9 +225,9 @@ async function image_post(postId, chats, repost, likes, views, username) {
 async function loader() {
     try {
         const [postsResponse, seesResponse,Vidresponse] = await Promise.all([
-            fetch("http://localhost:4000/get-posts"),
-            fetch("http://localhost:4000/get-sees"),
-            fetch("http://localhost:4000/get-vids")
+            fetch("${window.location.origin}/get-posts"),
+            fetch("${window.location.origin}/get-sees"),
+            fetch("${window.location.origin}/get-vids")
         ]);
 
         const posts = await postsResponse.json();
@@ -291,7 +291,7 @@ write1.addEventListener("keydown", async function (event) {
 
 
         try {
-            await fetch("http://localhost:4000/write-post", {
+            await fetch("${window.location.origin}/write-post", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(postData)
@@ -356,7 +356,7 @@ img_post1.addEventListener("click", async function () {
     img_post1.innerText = "Uploading...";
 
     try {
-        const response = await fetch("http://localhost:4000/upload", {
+        const response = await fetch("${window.location.origin}/upload", {
             method: "POST",
             body: formData
         });

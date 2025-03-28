@@ -44,7 +44,7 @@ log_in.addEventListener("click", async (event) => {
         try {
             const email = l_email.value;
             const password = l_password.value;
-            const response = await fetch("http://localhost:4000/log_in", {
+            const response = await fetch("${window.location.origin}/log_in", {
                 method: "Post",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
@@ -55,13 +55,13 @@ log_in.addEventListener("click", async (event) => {
             if (response.ok) {
                 const userID = data.userID;
 
-                const profileResponse  = await fetch(`http://localhost:4000/get-profile/${userID}`);
+                const profileResponse  = await fetch(`${window.location.origin}/get-profile/${userID}`);
                 const profileData  = await profileResponse.json();
 
                 if(profileResponse.ok)
                 {
                     profile_pic.src = profileData.image;
-                    window.location.href = `http://localhost:4000/home-X?userID=${userID}`;
+                    window.location.href = `${window.location.origin}/home-X?userID=${userID}`;
                 }
                 else{
                     console.error("Failed to load profile picture");
@@ -97,7 +97,7 @@ sign_up.addEventListener("click", async (event) => {
             formdata.append("email", email);
             formdata.append("pic", pic);
 
-            const dada = await fetch("http://localhost:4000/Sign-in", {
+            const dada = await fetch("${window.location.origin}/Sign-in", {
                 method: "Post",
                 body: formdata
             });
@@ -106,7 +106,7 @@ sign_up.addEventListener("click", async (event) => {
             
             if(dada.ok)
             {
-                window.location.href = `http://localhost:4000/home-X?userID=${repo.user_id}`;
+                window.location.href = `${window.location.origin}/home-X?userID=${repo.user_id}`;
             }
         }
         catch(er)
