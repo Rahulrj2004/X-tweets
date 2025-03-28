@@ -1168,6 +1168,10 @@ video {
 }
 
 @media not all and (min-width: 640px) {
+  .max-sm\:fixed {
+    position: fixed;
+  }
+
   .max-sm\:relative {
     position: relative;
   }
@@ -1190,6 +1194,58 @@ video {
 
   .max-sm\:top-72 {
     top: 18rem;
+  }
+
+  .max-sm\:top-9 {
+    top: 2.25rem;
+  }
+
+  .max-sm\:top-96 {
+    top: 24rem;
+  }
+
+  .max-sm\:top-\[\] {
+    top: ;
+  }
+
+  .max-sm\:top-\[500px\] {
+    top: 500px;
+  }
+
+  .max-sm\:top-\[450px\] {
+    top: 450px;
+  }
+
+  .max-sm\:right-\[150px\] {
+    right: 150px;
+  }
+
+  .max-sm\:right-\[px\] {
+    right: px;
+  }
+
+  .max-sm\:right-\[90px\] {
+    right: 90px;
+  }
+
+  .max-sm\:right-\[0px\] {
+    right: 0px;
+  }
+
+  .max-sm\:right-\[60px\] {
+    right: 60px;
+  }
+
+  .max-sm\:top-60 {
+    top: 15rem;
+  }
+
+  .max-sm\:left-5 {
+    left: 1.25rem;
+  }
+
+  .max-sm\:top-48 {
+    top: 12rem;
   }
 
   .max-sm\:z-20 {
