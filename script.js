@@ -149,56 +149,43 @@ app.post("/write-post", async (req, res) => {
 
 app.post("/upload", async (req, res) => {
     try {
-        const fileType = req.headers["content-type"].startsWith("image") ? "image" : "video";
-        let uploadMiddleware = fileType === "image" ? uploadImage.single("file") : uploadVideo.single("file");
-
-        uploadMiddleware(req,res,async(err)=>{
+        let uploadMiddleware = uploadImage.single("file"); // Default to image
+        uploadMiddleware(req, res, async (err) => {
             if (err) return res.status(500).json({ error: "Upload failed" });
-
             if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-            
             const { chats, repost, likes, views, profile, username } = req.body;
-            
             const base64Data1 = profile.replace(/^data:image\/\w+;base64,/, "");
             const buffer1 = Buffer.from(base64Data1, "base64");
-            
-            if(fileType == "image")
-                {
-                    const dada = new p_diddy(
-                        {
-                            img: req.file.buffer,
-                            contentType:req.file.mimetype,
-                            profile:buffer1,
-                            Username:username,
-                            contentType1:"image/png",
-                            chats: chats,
-                            repost: repost,
-                            likes: likes,
-                            views: views
-                        }
-                    )
-                    await dada.save();
-                    res.json({
-                        message:"Image uploaded sucessfully",
-                        
-                    });
-                }
-            else
-            {
-                const filename = `${req.file.originalname}`;
-                // ✅ Stream video directly to GridFS
-                const uploadStream = gridFSBucket.openUploadStream(req.file.originalname, {
-                    contentType: req.file.mimetype,
-                });
 
-                uploadStream.end(req.file.buffer); // ✅ Directly pass buffer to GridFS
+            // ✅ Determine file type correctly using req.file.mimetype
+            const mimeType = req.file.mimetype;
+            const isImage = mimeType.startsWith("image");
+
+            if (isImage) {
+                const dada = new p_diddy({
+                    img: req.file.buffer,
+                    contentType: req.file.mimetype,
+                    profile: buffer1,
+                    Username: username,
+                    contentType1: "image/png",
+                    chats,
+                    repost,
+                    likes,
+                    views,
+                });
+                await dada.save();
+                res.json({ message: "Image uploaded successfully" });
+            } else {
+                const filename = req.file.originalname;
+                const uploadStream = gridFSBucket.openUploadStream(filename, { contentType: mimeType });
+
+                uploadStream.end(req.file.buffer);
 
                 uploadStream.on("finish", async () => {
-
                     const newVideo = new vid({
-                        filename: filename,
-                        contentType: req.file.mimetype,
+                        filename,
+                        contentType: mimeType,
                         profile: buffer1,
                         Username: username,
                         contentType1: "image/png",
@@ -208,16 +195,15 @@ app.post("/upload", async (req, res) => {
                         views,
                     });
                     await newVideo.save();
-                    return res.json({ message: "Video uploaded successfully!" });
+                    res.json({ message: "Video uploaded successfully!" });
                 });
             }
         });
-    }
-    catch (er) {
+    } catch (er) {
         console.error(er);
         res.status(500).json({ er: "There was an error saving the post" });
     }
-})
+});
 
 app.get("/image/:id", async (req, res) => {
     try {

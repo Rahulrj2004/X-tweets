@@ -52,15 +52,15 @@ async function written_post(data, chats, repost, likes, views, profileId, userna
 
     let html = ` <div class="written_post flex border border-x-0 border-gray-600 ">
                     <div class="account my-2 max-sm:w-11">
-                        <img src="${profile}" class="rounded-full w-10 h-10 mx-5 max-sm:w-8 max-sm:h-8 max-sm:mx-3" alt="">
+                        <img src="${profile}" class="rounded-full w-10 h-10 mx-5 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3" alt="">
                     </div>
                     <div class="mx-5">
-                        <div>
+                        <div class=" mx-1">
                             <span class="font-bold hover:underline my-2 text-sm cursor-pointer">${username}
                             </span>
                             <div class="text-sm">poet</div>
                         </div>
-                        <div class="thought my-2 flex justify-start">
+                        <div class="thought my-3 mx-1 flex justify-start">
                             ${data}
                         </div>
                         <div class="icons flex gap-8 text-sm m-3">
@@ -117,7 +117,7 @@ async function video_post(chats, repost, likes, views, profileId, username) {
 
     let html = ` <div class=" flex border border-x-0 border-gray-600 ">
                     <div class="account my-2 max-sm:w-11">
-                        <img src="${profile}" class="rounded-full w-10 h-10 mx-5 max-sm:w-8 max-sm:h-8 max-sm:mx-3" alt="">
+                        <img src="${profile}" class="rounded-full w-10 h-10 mx-5 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3" alt="">
                     </div>
                     <div class="mx-5">
                         <div>
@@ -175,9 +175,9 @@ async function image_post(postId, chats, repost, likes, views, username) {
     const profile1 = `data:${data.contentType1};base64,${data.profile}`;
 
     let html = `<div class="post flex border border-x-0 border-gray-600 max-sm:ml-1">
-    <div class="account my-2 max-sm:w-11">
+    <div class="account my-2 max-sm:w-12">
         <img src="${profile1}"
-            class="rounded-full w-10 h-10 max-sm:w-8 max-sm:h-8 max-sm:mx-3 mx-5" alt="">
+            class="rounded-full w-10 h-10 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3 mx-5" alt="">
     </div>
     <div class="mx-5 ">
         <div>
@@ -186,7 +186,7 @@ async function image_post(postId, chats, repost, likes, views, username) {
             <div class="text-sm">legend</div>
         </div>
         <div class="postimg my-2 flex justify-evenly">
-            <img class="rounded-md object-center h-64 max-sm:h-48 w-auto" src="${imgURL}" alt="">
+            <img class="rounded-md object-center h-64 max-sm:h-48 w-auto mx-2" src="${imgURL}" alt="">
         </div>
         <div class="icons flex gap-8 text-sm m-3">
             <div class="comment flex items-center cursor-pointer gap-1 hover:text-blue-400">
