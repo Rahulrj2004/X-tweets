@@ -60,7 +60,7 @@ async function written_post(data, chats, repost, likes, views, profileId, userna
                             </span>
                             <div class="text-sm">poet</div>
                         </div>
-                        <div class="thought my-3 mx-1 flex justify-start">
+                        <div class="thought my-3 mx-1 flex justify-start mr-2">
                             ${data}
                         </div>
                         <div class="icons flex gap-8 text-sm m-3">
@@ -126,7 +126,7 @@ async function video_post(chats, repost, likes, views, profileId, username) {
                             <div class="text-sm">poet</div>
                         </div>
                         <div class="postimg my-2 flex justify-evenly">
-                            <video  autoplay muted controls class="rounded-md object-center h-64 max-sm:h-48 w-auto" src="${videourl}" type="video/mp4">Your browser doesn't support video tag.</video>
+                            <video  autoplay muted controls class="rounded-md object-center h-64 max-sm:h-48 w-auto mr-2" src="${videourl}" type="video/mp4">Your browser doesn't support video tag.</video>
                         </div>
                         <div class="icons flex gap-8 text-sm m-3">
                             <div class="comment flex items-center cursor-pointer gap-1 hover:text-blue-400">
@@ -186,7 +186,7 @@ async function image_post(postId, chats, repost, likes, views, username) {
             <div class="text-sm">legend</div>
         </div>
         <div class="postimg my-2 flex justify-evenly">
-            <img class="rounded-md object-center h-64 max-sm:h-48 w-auto mx-2" src="${imgURL}" alt="">
+            <img class="rounded-md object-center h-64 max-sm:h-48 w-auto mx-2 mr-2" src="${imgURL}" alt="">
         </div>
         <div class="icons flex gap-8 text-sm m-3">
             <div class="comment flex items-center cursor-pointer gap-1 hover:text-blue-400">
@@ -382,6 +382,3 @@ close2.addEventListener("click", () => {
 hamburger.addEventListener("click", () => {
     first.classList.replace("max-sm:translate-x-[-80px]", "max-sm:translate-x-[100px]");
 })
-
-
-
