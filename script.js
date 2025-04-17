@@ -22,6 +22,7 @@ const port = process.env.PORT||4000;
 async function connectDB() {
     try {
         await mongoose.connect("mongodb+srv://mr_unknown:unknown@cluster0.fboxd.mongodb.net/Twitter?retryWrites=true&w=majority&appName=cluster0");
+        // await mongoose.connect("mongodb://localhost:27017/");
         console.log("Connected to the database");
     }
     catch (e) {
