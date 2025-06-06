@@ -22,7 +22,7 @@ const port = process.env.PORT||4000;
 async function connectDB() {
     try {
         await mongoose.connect("mongodb+srv://mr_unknown:unknown@cluster0.fboxd.mongodb.net/Twitter?retryWrites=true&w=majority&appName=cluster0");
-        // await mongoose.connect("mongodb://localhost:27017/");
+        // await mongoose.connect("mongodb://localhost:27017/Twitter");
         console.log("Connected to the database");
     }
     catch (e) {
@@ -58,16 +58,20 @@ app.use("/src", express.static(path.join(__dirname, "src")));
 app.use("/front", express.static(path.join(__dirname, "front")));
 app.use("/public", express.static(path.join(__dirname, "public")));
 
-app.get("/", (req, res) => {
-    // res.sendFile(path.join(__dirname,"/front/index.html"));
-    try {
-        res.sendFile(path.join(__dirname, "front", "Aut.html"));
-    }
-    catch (er) {
+app.get("/",(req,res)=>{
+     try {
+        const userAgent = req.headers['user-agent'];
+        const isMobile = /mobile|android|iphone|ipad/i.test(userAgent);
+
+        const filePath = isMobile
+            ? path.join(__dirname, "front", "mobile.html")    // your mobile version
+            : path.join(__dirname, "front", "Aut.html");      // your desktop version
+
+        res.sendFile(filePath);
+    } catch (err) {
         res.status(500).json({ error: "Error getting the Authentication page" });
     }
 })
-
 app.get("/home-X",(req,res)=>{
     try{
         res.sendFile(path.join(__dirname,"front","index.html"));
@@ -359,7 +363,10 @@ app.get("/get-profile/:user_id",async (req,res)=>{
     }
 })
 
-app.listen(port, () => {
-    console.log("The server is running st port :- ", port);
-})
+// app.listen(port, () => {
+//     console.log("The server is running st port :- ", port);
+// })
 
+app.listen(port, '0.0.0.0', () => {
+  console.log('Server running');
+});

@@ -11,9 +11,10 @@
     <link rel="stylesheet" href="../src/output.css">
 </head>
 
-<body class=" bg-black text-white">
+<body class="bg-black text-white">
     <div class="flex container my-4 ">
-        <div class="first ml-24 max-sm:ml-0 max-sm:translate-x-[-80px] fixed top-0 w-[20%] max-sm:z-20 transition-transform duration-500 ease-in-out" id="first">
+        <div class="first ml-24 max-sm:ml-0 max-sm:translate-x-[-80px] fixed top-0 w-[20%] max-sm:z-20 transition-transform duration-500 ease-in-out"
+            id="first">
             <div class="logo invert my-3 max-sm:hidden">
                 <svg viewBox="0 0 24 24" aria-="true"
                     class="m-auto w-8 r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-k200y r-1nao33i r-5sfk15 r-kzbkwu">
@@ -27,8 +28,7 @@
 
             <div class="sidebar flex items-end flex-col">
                 <ul class="flex flex-col text-xl space-y-5 px-11 max-sm:px-0 max-sm:bg-black rounded-lg">
-                    <li
-                        class="md:w-fit px-3 py-2 max-sm:mb-3 hidden max-sm:!block cursor-pointer hover:text-blue-500">
+                    <li class="md:w-fit px-3 py-2 max-sm:mb-3 hidden max-sm:!block cursor-pointer hover:text-blue-500">
                         <button id="close1"><span class="material-symbols-outlined text-4xl relative left-28">
                                 cancel_presentation
                             </span></button>
@@ -53,8 +53,8 @@
                         class="flex justify-start items-center gap-3  md:w-fit px-3 py-1 max-sm:py-2 max-sm:pl-4 hover:bg-gray-900 hover:rounded-full cursor-pointer">
                         <span class="material-symbols-outlined">communities</span> <span class=""> Communities</span>
                     </li>
-                    <li class="flex justify-start items-center gap-3  md: w-fit px-3 py-1 max-sm:py-2 max-sm:pl-4"> <svg viewBox="0 0 24 24"
-                            aria-="true"
+                    <li class="flex justify-start items-center gap-3  md: w-fit px-3 py-1 max-sm:py-2 max-sm:pl-4"> <svg
+                            viewBox="0 0 24 24" aria-="true"
                             class=" invert w-5 r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-k200y r-1nao33i r-5sfk15 r-kzbkwu">
                             <g>
                                 <path
@@ -83,9 +83,9 @@
         </div>
         <div
             class="second max-sm:w-full max-sm:ml-0 ml-[25%] border-[1px] border-x-gray-700 overflow-y-auto border-y-black w-[43%] max-sm:overflow-x-hidden">
-            <div class="top flex p-3 relative ">
+            <div class="top flex p-4 fixed top-0 bg-black mb-6 w-[43%] max-sm:w-full">
                 <button id="hamburger"><span class="material-symbols-outlined hidden max-sm:block max-sm:mx-2">
-                    menu_open
+                        menu_open
                     </span></button>
                 <div class="absolute w-14 h-1 rounded-full bg-blue-500 bottom-0 max-sm:left-[26%] left-[21%] z-10">
                 </div>
@@ -94,7 +94,9 @@
                 <div class="right flex justify-center w-1/2 font-bold">following</div>
 
             </div>
-            <div class="h-[1px] w-full bg-gray-700"></div>
+            <br>
+            <br>
+            <div class="h-[1px] w-full bg-gray-700 "></div>
             <div class="whatsaap flex gap-4 m-1">
                 <div class="image">
                     <img src="public/celeb_potrait2-Photoroom.png " id="profile_pic" class="rounded-full w-14 h-14 m-2"
@@ -134,93 +136,114 @@
             </div>
             <!-- <div class="border-[1px] border-x-gray-700"></div> -->
 
-            <div id="posts" class="posts">
-                <div class="post flex border border-x-0 border-gray-600">
-                    <div class="account my-2 max-sm:w-12">
-                        <img src="public/celeb_potrait3-Photoroom.png" class="rounded-full w-10 h-10 mx-5 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3" alt="">
+            <div id="scroll-container">
+                <div id="posts" class="posts">
+                    <div class="post flex border border-x-0 border-gray-600">
+                        <div class="account my-2 max-sm:w-12">
+                            <img src="public/celeb_potrait3-Photoroom.png"
+                                class="rounded-full w-10 h-10 mx-5 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3" alt="">
+                        </div>
+                        <div class="mx-5">
+                            <div>
+                                <span class="font-bold hover:underline my-2 text-sm cursor-pointer"> Crazy_scenes . 6h
+                                </span>
+                                <div class="text-sm">legend</div>
+                            </div>
+                            <div class="postimg my-2 flex justify-evenly">
+                                <img class="rounded-md max-h-96 max-sm:h-auto max-w-full mr-2"
+                                    src="public/sc2.jpg" alt="">
+                            </div>
+                            <div class="icons flex gap-8 text-sm m-3">
+                                <div class="comment-btn flex items-center cursor-pointer gap-1 hover:text-blue-400"
+                                    onclick="toggleIcon(this, 'comment')">
+                                    <span class="icon-symbol comment-icon"></span>
+                                    <span>1.2k</span>
+                                </div>
+
+                                <div class="repost-btn flex items-center cursor-pointer gap-1 hover:text-green-500"
+                                    onclick="toggleIcon(this, 'repost')">
+                                    <span class="icon-symbol repost-icon"></span>
+                                    <span>81</span>
+                                </div>
+
+                                <div class="like-btn flex items-center cursor-pointer gap-1 hover:text-red-500"
+                                    onclick="toggleIcon(this, 'like')">
+                                    <span class="icon-symbol like-icon"></span>
+                                    <span>9.2k</span>
+                                </div>
+
+                                <div class="view-btn flex items-center cursor-pointer gap-1 hover:text-blue-500"
+                                    onclick="toggleIcon(this, 'view')">
+                                    <span class="icon-symbol view-icon"></span>
+                                    <span>13k</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mx-5">
-                        <div>
-                            <span class="font-bold hover:underline my-2 text-sm cursor-pointer"> Crazy_scenes . 6h
-                            </span>
-                            <div class="text-sm">legend</div>
+                    <div class="written_post flex  gap-3 border border-x-0 border-gray-600">
+                        <div class="account my-2 max-w-11">
+                            <img src="public/celeb_potrait4-Photoroom.png" class="rounded-full w-10 h-10 mx-5" alt="">
                         </div>
-                        <div class="postimg my-2 flex justify-evenly">
-                            <img class="rounded-md h-64 w-auto max-sm:h-48 object-center mx-2 mr-2" src="public/sc2.jpg" alt="">
-                        </div>
-                        <div class="icons flex gap-8 text-sm m-3">
-                            <div class="comment flex items-center cursor-pointer gap-1 hover:text-blue-400">
-                                <span class="material-symbols-outlined text-[18px]">
-                                    chat_bubble
+                        <div class="mx-5">
+                            <div class="my-3">
+                                <span class="font-bold hover:underline text-sm cursor-pointer"> broken_soul . 13h
                                 </span>
-                                <span>1.2k</span>
+                                <div class="text-sm">poet</div>
                             </div>
-                            <div class="repost flex items-center cursor-pointer gap-1 hover:text-green-500">
-                                <span class="material-symbols-outlined text-[18px]">
-                                    repeat
-                                </span>
-                                <span>81</span>
+                            <div class="thought my-5 w-auto max-sm:h-auto mr-2">
+                                There will come soft rain and the smell of the ground,
+                                <br>
+                                And swallows circling with their shimmering sound;
+                                <br>
+                                And frogs in the pools singing at night,
+                                <br>
+                                And wild plum trees in tremulous white;
+                                <br>
+                                Robins will wear their feathery fire,
+                                <br>
+                                Whistling their whims on a low fence-wire;
+                                <br>
+                                And not one will know of the war, not one
+                                <br>
+                                Will care at last when it is done.
+                                <br>
+                                Not one would mind, neither bird nor tree,
+                                <br>
+                                If mankind perished utterly;
+                                <br>
+                                And Spring herself, when she woke at dawn
+                                <br>
+                                Would scarcely know that we were gone.
                             </div>
-                            <div class="like flex items-center cursor-pointer gap-1 hover:text-red-500">
-                                <span class="material-symbols-outlined text-[18px]">
-                                    favorite
-                                </span>
-                                <span>9.2k</span>
-                            </div>
-                            <div class="view flex items-center cursor-pointer gap-1 hover:text-blue-500">
-                                <span class="material-symbols-outlined text-[18px]">
-                                    equalizer
-                                </span>
-                                <span>13k</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="written_post flex  gap-3 border border-x-0 border-gray-600">
-                    <div class="account my-2">
-                        <img src="public/celeb_potrait4-Photoroom.png" class="rounded-full w-10 h-10 mx-5" alt="">
-                    </div>
-                    <div class="mx-5">
-                        <div class="my-3">
-                            <span class="font-bold hover:underline text-sm cursor-pointer"> broken_soul . 13h
-                            </span>
-                            <div class="text-sm">poet</div>
-                        </div>
-                        <div class="thought my-5 w-auto max-sm:h-auto">
-                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sit illo officia, quibusdam
-                            assumenda iusto itaque doloribus ipsam quaerat praesentium repudiandae ea repellendus,
-                            corrupti fugiat asperiores non consequatur!
-                        </div>
-                        <div class="icons flex gap-8 text-sm m-3">
-                            <div class="comment flex items-center cursor-pointer gap-1 hover:text-blue-400">
-                                <span class="material-symbols-outlined text-[18px]">
-                                    chat_bubble
-                                </span>
-                                <span>1.2k</span>
-                            </div>
-                            <div class="repost flex items-center cursor-pointer gap-1 hover:text-green-500">
-                                <span class="material-symbols-outlined text-[18px]">
-                                    repeat
-                                </span>
-                                <span>81</span>
-                            </div>
-                            <div class="like flex items-center cursor-pointer gap-1 hover:text-red-500">
-                                <span class="material-symbols-outlined text-[18px]">
-                                    favorite
-                                </span>
-                                <span>9.2k</span>
-                            </div>
-                            <div class="view flex items-center cursor-pointer gap-1 hover:text-blue-500">
-                                <span class="material-symbols-outlined text-[18px]">
-                                    equalizer
-                                </span>
-                                <span>13k</span>
+                            <div class="icons flex gap-8 text-sm m-3">
+                                <div class="comment-btn flex items-center cursor-pointer gap-1 hover:text-blue-400"
+                                    onclick="toggleIcon(this, 'comment')">
+                                    <span class="icon-symbol comment-icon"></span>
+                                    <span>1.2k</span>
+                                </div>
+
+                                <div class="repost-btn flex items-center cursor-pointer gap-1 hover:text-green-500"
+                                    onclick="toggleIcon(this, 'repost')">
+                                    <span class="icon-symbol repost-icon"></span>
+                                    <span>81</span>
+                                </div>
+
+                                <div class="like-btn flex items-center cursor-pointer gap-1 hover:text-red-500"
+                                    onclick="toggleIcon(this, 'like')">
+                                    <span class="icon-symbol like-icon"></span>
+                                    <span>9.2k</span>
+                                </div>
+
+                                <div class="view-btn flex items-center cursor-pointer gap-1 hover:text-blue-500"
+                                    onclick="toggleIcon(this, 'view')">
+                                    <span class="icon-symbol view-icon"></span>
+                                    <span>13k</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="third w-full md:ml-[70%] fixed top-0 max-sm:hidden">
             <div class="search m-3">
@@ -275,9 +298,12 @@
                     close
                 </span></button>
             <div class="flex">
-                <form class="text-2xl" action="/upload" enctype="multipart/form-data">
+                <form class="text-2xl max-sm:flex max-sm:justify-center max-sm:items-center" action="/upload"
+                    enctype="multipart/form-data">
                     <label for="upload">
-                        <img id="ponga" src="../public/no-image.jpg" class="w-40 h-30 mx-16 rounded-md max-sm:fixed max-sm:left-5 max-sm:top-48 max-sm:w-52 max-sm:h-40" alt="">
+                        <img id="ponga" src="../public/no-image.jpg"
+                            class="w-40 h-30 mx-16 rounded-md max-sm:relative max-sm:left-25 max-sm:mx-0 max-sm:top-48 max-sm:w-52 max-sm:h-40 max-sm:mt-8"
+                            alt="">
                     </label>
                     <input id="upload" class="hidden" type="file" name="image" onchange="getImage(this);">
                 </form>
@@ -286,7 +312,8 @@
                         <h1>Upload your image/Video </h1>
                     </span>
                     <br>
-                    <button id="img-post1" class="bg-gray-300 text-black px-10 rounded-full py-1 m-2 max-sm:fixed max-sm:right-[110px] max-sm:top-[500px]">Post</button>
+                    <button id="img-post1"
+                        class="bg-gray-300 text-black px-10 rounded-full py-1 m-2 max-sm:fixed max-sm:right-[110px] max-sm:top-[500px]">Post</button>
                 </div>
             </div>
         </div>
@@ -294,5 +321,6 @@
     <script src="/front/main.js"></script>
 
 </body>
+
 
 </html>

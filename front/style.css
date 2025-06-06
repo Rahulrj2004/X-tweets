@@ -153,7 +153,7 @@ body{
     overflow: hidden;
     transition: all 0.6s ease-in-out;
     border-radius: 150px 0 0 100px;
-    z-index: 1000;
+    z-index: 900;
 }
 
 .container.active .toggle-container{
@@ -230,6 +230,39 @@ body{
         
     }
 }
+
+
+.splash-container {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: black;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splash-container .typewriter {
+  font-size: 10rem;
+  font-weight: bold;
+  font-family: monospace;
+  color: white;
+  animation: heartbeat 1.8s ease-in-out infinite;
+}
+
+/* Heartbeat Animation */
+@keyframes heartbeat {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.1;
+    transform: scale(1.18);
+  }
+}
+
 /* @media screen and (max-width:650px){
     .container{
         height:calc(100vh - 20px);

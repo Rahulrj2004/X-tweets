@@ -1,3 +1,12 @@
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const splash = document.getElementById("splash-screen");
+    splash.style.transition = "opacity 0.5s ease";
+    splash.style.opacity = 0;
+    setTimeout(() => splash.remove(), 500);
+  }, 4000); // 4 seconds match
+});
+
 
 
 function getImage(input) {
@@ -18,7 +27,7 @@ const loginBtn = document.getElementById('login');
 registerBtn.addEventListener('click', () => {
     container.classList.add("active");
 });
-
+ 
 loginBtn.addEventListener('click', () => {
     container.classList.remove("active");
 });

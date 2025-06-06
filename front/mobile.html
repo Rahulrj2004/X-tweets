@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="../front/mstyle.css">
+</head>
+
+<body>
+    <div class="splash-container" id="splash-screen">
+        <h1 class="typewriter">X</h1>
+    </div>
+
+    <div class="container">
+        <div class="flip-card" id="flipCard">
+            <!-- Login Side -->
+            <div class="card-face card-front">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" aria-="true"
+                            class="m-auto w-8 r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-k200y r-1nao33i r-5sfk15 r-kzbkwu">
+                            <g>
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z">
+                                </path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="logo-text">Welcome Back !!</div>
+                </div>
+
+                <h2 class="form-title">Log In</h2>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="l_email">Email</label>
+                        <input type="email" id="l_email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="l_password">Password</label>
+                        <input type="password" id="l_password">
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe">Remember me</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="log_in">Sign In</button>
+                </form>
+                <div class="switch-text">
+                    Don't have an account? <span class="switch-link" onclick="flipCard()">Sign Up</span>
+                </div>
+            </div>
+
+            <!-- Signup Side -->
+            <div class="card-face card-back">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <!-- <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                        </svg> -->
+                        <label for="profile_input">
+                            <img src="../public/profile_placeholder.jpg" id="profile" alt="">
+                        </label>
+                    </div>
+                </div>
+
+                <h2 class="form-title second">Create Account</h2>
+
+                <form id="signupForm" enctype="multipart/form-data">
+                    <input type="file" id="profile_input" name="pic" onchange="getImage(this);">
+                    <div class="form-group second">
+                        <label for="s_username">Full Name</label>
+                        <input type="text" id="s_username" required>
+                    </div>
+
+                    <div class="form-group second">
+                        <label for="s_email">Email</label>
+                        <input type="email" id="s_email" required>
+                    </div>
+
+                    <div class="form-group second">
+                        <label for="s_password">Password</label>
+                        <input type="password" id="s_password" required>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="agreeTerms" required>
+                        <label for="agreeTerms">I agree to the Terms & Privacy Policy</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="sign_up">Create Account</button>
+                </form>
+
+                <div class="switch-text second">
+                    Already have an account? <span class="switch-link" onclick="flipCard()">Sign In</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                const splash = document.getElementById("splash-screen");
+                splash.style.transition = "opacity 0.5s ease";
+                splash.style.opacity = 0;
+                setTimeout(() => splash.remove(), 500);
+            }, 4000); // 4 seconds match
+        });
+
+
+        function flipCard() {
+            const card = document.getElementById('flipCard');
+            card.classList.toggle('flipped');
+        }
+
+
+        // Form submissions
+        // document.getElementById('loginForm').addEventListener('submit', function (e) {
+        //     e.preventDefault();
+        //     const btn = this.querySelector('button[type="submit"]');
+        //     btn.classList.add('loading');
+
+        //     setTimeout(() => {
+        //         btn.classList.remove('loading');
+        //         alert('Login successful! Welcome back.');
+        //     }, 2000);
+        // });
+
+        // document.getElementById('signupForm').addEventListener('submit', function (e) {
+        //     e.preventDefault();
+        //     const btn = this.querySelector('button[type="submit"]');
+        //     btn.classList.add('loading');
+
+        //     setTimeout(() => {
+        //         btn.classList.remove('loading');
+        //         alert('Account created successfully! Welcome aboard.');
+        //     }, 2000);
+        // });
+
+        // Add touch feedback for mobile
+        document.querySelectorAll('.btn, .switch-link').forEach(element => {
+            element.addEventListener('touchstart', function () {
+                this.style.transform = 'scale(0.98)';
+            });
+
+            element.addEventListener('touchend', function () {
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+
+        // Prevent double-tap zoom on buttons
+        // document.querySelectorAll('.btn').forEach(button => {
+        //     button.addEventListener('touchend', function (e) {
+        //         e.preventDefault();
+        //     });
+        // });
+
+        function getImage(input) {
+            const file = input.files[0]; // Get the first selected file
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById("profile").src = e.target.result; // Update image preview
+                };
+                reader.readAsDataURL(file); // Convert file to a data URL
+            }
+        }
+
+
+        const log_in = document.getElementById("log_in");
+        const sign_up = document.getElementById("sign_up");
+
+        const l_email = document.getElementById("l_email");
+        const l_password = document.getElementById("l_password");
+
+        const s_username = document.getElementById("s_username");
+        const s_email = document.getElementById("s_email");
+        const s_password = document.getElementById("s_password");
+        const profile_pic = document.getElementById("profile_input");
+
+        log_in.addEventListener("click", async (event) => {
+            event.preventDefault();
+            log_in.classList.add('loading');
+
+            if (!l_email.value || !l_password.value) {
+                alert("Fill the values");
+            }
+            else {
+                try {
+                    const email = l_email.value;
+                    const password = l_password.value;
+                    const response = await fetch(`${window.location.origin}/log_in`, {
+                        method: "Post",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email, password }),
+                    });
+                    const data = await response.json();
+                    console.log(data.message);
+
+                    if (response.ok) {
+                        const userID = data.userID;
+
+                        const profileResponse = await fetch(`${window.location.origin}/get-profile/${userID}`);
+                        const profileData = await profileResponse.json();
+
+                        if (profileResponse.ok) {
+                            profile_pic.src = profileData.image;
+                            window.location.href = `${window.location.origin}/home-X?userID=${userID}`;
+                        }
+                        else {
+                            console.error("Failed to load profile picture");
+                        }
+                    } else {
+                        alert(data.message);
+                    }
+                }
+                catch (e) {
+                    console.error("Login error : ", e);
+                }
+            }
+            log_in.classList.remove('loading');
+
+        })
+
+        sign_up.addEventListener("click", async (event) => {
+            event.preventDefault();
+            sign_up.classList.add("loading");
+
+            if (!profile_pic.files.length) {
+                alert("upload you pic first");
+            }
+            if (!s_username.value || !s_email.value || !s_password.value) {
+                alert("please !! fill all the fields");
+            }
+            else {
+                try {
+                    const username = s_username.value;
+                    const password = s_password.value;
+                    const email = s_email.value;
+                    const pic = profile_pic.files[0];
+
+                    const formdata = new FormData();
+                    formdata.append("username", username);
+                    formdata.append("password", password);
+                    formdata.append("email", email);
+                    formdata.append("pic", pic);
+
+                    const dada = await fetch(`${window.location.origin}/Sign-in`, {
+                        method: "Post",
+                        body: formdata
+                    });
+                    const repo = await dada.json();
+                    alert(repo.message);
+
+                    if (dada.ok) {
+                        window.location.href = `${window.location.origin}/home-X?userID=${repo.user_id}`;
+                    }
+                }
+                catch (er) {
+                    console.error("Error getting the data", er);
+                }
+            }
+            sign_up.classList.remove("loading");
+        })
+
+    </script>
+</body>
+
+</html>
