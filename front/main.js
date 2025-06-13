@@ -9,9 +9,12 @@ const profile_pic = document.getElementById("profile_pic");
 const close2 = document.getElementById("close1");
 const first = document.getElementById("first");
 const hamburger = document.getElementById("hamburger");
+const profile_page = document.getElementById("profile-page");
+const home_page = document.getElementById("home-page");  
 
 let digger = "baba";
 let chigger = "chichi";
+let user_Id;  //user id of the person 
 
 window.addEventListener("DOMContentLoaded", async (event) => {
     // if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
@@ -22,6 +25,7 @@ window.addEventListener("DOMContentLoaded", async (event) => {
         console.error("No userID found in URL");
         return;
     }
+    user_Id = userID;
     try {
         const response = await fetch(`${window.location.origin}/get-profile/${userID}`);
         const data = await response.json();
@@ -55,7 +59,7 @@ async function written_post(data, chats, repost, likes, views, profileId, userna
                     <div class="account my-2 max-sm:w-11">
                         <img src="${profile}" class="rounded-full w-10 h-10 mx-5 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3" alt="">
                     </div>
-                    <div class="mx-5">
+                    <div class="mx-5"> 
                         <div class=" mx-1">
                             <span class="font-bold hover:underline my-2 text-sm cursor-pointer">${username}
                             </span>
@@ -511,23 +515,24 @@ function setupObserver() {
 }
 
 // Skeleton screen functions
+
 function showSkeletons(count) {
     const postsContainer = document.getElementById("posts");
     for (let i = 0; i < count; i++) {
         const skeletonHtml = `
             <div class="post flex border border-x-0 border-gray-600 max-sm:ml-1 skeleton">
-                <div class="account my-2 max-sm:w-12">
+                <div class="account my-2 max-sm:w-11">
                     <div class="DP rounded-full w-10 h-10 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3 mx-5 bg-gray-300"></div>
                 </div>
-                <div class="mx-5 w-full h-2">
+                <div class="mx-5 flex-1">
                     <div class="mb-4">
                         <div class="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
                         <div class="h-3 bg-gray-300 rounded w-1/2"></div>
                     </div>
                     <div class="postimg my-2">
-                        <div class="Photu rounded-md bg-gray-300 h-64 w-full"></div>
+                        <div class="bg-gray-300 rounded-md h-64 w-full"></div>
                     </div>
-                    <div class="icons flex gap-8 text-sm m-3 h-4">
+                    <div class="icons flex gap-8 text-sm m-3">
                         <div class="h-3 bg-gray-300 rounded w-8"></div>
                         <div class="h-3 bg-gray-300 rounded w-8"></div>
                         <div class="h-3 bg-gray-300 rounded w-8"></div>
@@ -544,7 +549,6 @@ function removeSkeletons() {
     document.querySelectorAll('.skeleton').forEach(el => el.remove());
 }
 
-// Initialize
 loader();
 
 write1.addEventListener("keydown", async function (event) {
@@ -677,9 +681,9 @@ function typeLoop() {
         setTimeout(() => {
             index = 0;
             typeLoop();
-        }, 1500); // Pause before restarting
+        }, 1500);
     } else {
-        setTimeout(typeLoop, 140); // Typing speed
+        setTimeout(typeLoop, 140); 
     }
 }
 
@@ -705,51 +709,81 @@ const iconConfig = {
 };
 
 function toggleIcon(element, iconType) {
-    // Find the icon span within the clicked element
     const iconElement = element.querySelector(`.${iconType}-icon`);
 
-    // Check if icon is currently active
     const isActive = element.classList.contains('active');
 
     if (!isActive) {
-        // Activate
         iconElement.innerHTML = iconConfig[iconType].activeIcon;
         element.classList.add('active');
 
-        // Add active color classes
         if (iconType === 'comment') element.classList.add('text-blue-400');
         if (iconType === 'repost') element.classList.add('text-green-500');
         if (iconType === 'like') element.classList.add('text-red-500');
         if (iconType === 'view') element.classList.add('text-blue-500');
     } else {
-        // Deactivate
         iconElement.innerHTML = iconConfig[iconType].inactive;
         element.classList.remove('active');
 
-        // Remove active color classes
         element.classList.remove('text-blue-400', 'text-green-500', 'text-red-500', 'text-blue-500');
     }
 }
 
-// Initialize all icons on page load
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize comment icons
     document.querySelectorAll('.comment-icon').forEach(icon => {
         icon.innerHTML = iconConfig.comment.inactive;
     });
 
-    // Initialize repost icons
     document.querySelectorAll('.repost-icon').forEach(icon => {
         icon.innerHTML = iconConfig.repost.inactive;
     });
 
-    // Initialize like icons
     document.querySelectorAll('.like-icon').forEach(icon => {
         icon.innerHTML = iconConfig.like.inactive;
     });
 
-    // Initialize view icons
     document.querySelectorAll('.view-icon').forEach(icon => {
         icon.innerHTML = iconConfig.view.inactive;
     });
 });
+
+profile_page.addEventListener("click",()=>{
+    // const userID = new URLSearchParams(window.location.search).get("userID");
+    window.location.href = `${window.location.origin}/person-profile/${user_Id}`;
+})
+
+home_page.addEventListener("click",()=>{
+    window.location.href = `${window.location.origin}/home-X?userID=${user_Id}`;
+})
+
+
+function serve_default(){
+    try{
+        window.location.href =`${window.location.origin}/default`;
+    }
+    catch(er)
+    {
+        console.error("Can't fetch the default page");
+    }
+}
+function showNotification() {
+    const toast = document.getElementById("notification-toast");
+    const sound = document.getElementById("notification-sound");
+
+    // Show with pulse animation
+    toast.classList.remove("opacity-0", "pointer-events-none", "-translate-y-10");
+    toast.classList.add("opacity-100", "translate-y-0", "animate-pulse");
+
+    // Play sound
+    sound.pause();
+    sound.currentTime = 0;
+    sound.play().catch((e) => {
+        console.warn("Autoplay blocked or sound error:", e);
+    });
+
+    // Hide after 2.5s
+    setTimeout(() => {
+        toast.classList.remove("opacity-100", "translate-y-0", "animate-pulse");
+        toast.classList.add("opacity-0", "pointer-events-none", "-translate-y-10");
+    }, 2500);
+}

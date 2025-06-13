@@ -363,9 +363,86 @@ app.get("/get-profile/:user_id",async (req,res)=>{
     }
 })
 
-// app.listen(port, () => {
-//     console.log("The server is running st port :- ", port);
+app.get("/person-profile/:userID",(req,res)=>{
+    try{
+        const us = req.params.userID
+        res.sendFile(path.join(__dirname,"front","profile.html"));
+    }
+    catch(er)
+    {
+        console.error("There was an error fetching the profile page ");
+    }
+})
+
+
+// app.get("/profile-data/:Username",async (req,res)=>{
+//     try
+//     {
+//         const usr = req.params.Username;
+
+//         const wr= await diddy.find({Username:usr},{data:1,likes:1,chats:1,_id:0});
+//         const im = await p_diddy.find({Username:usr},{img:1,contentType:1,likes:1,chats:1,_id:0});
+//         const vd = await vid.find({Username:usr});
+
+//         const ved = vd.forEach(v=>{
+//             gridFSBucket.openDownloadStreamByName(v.filename);
+//         })
+
+//         const imag = im.map(i=>({
+//             image:`data:${i.contentType};base64,${i.img.toString("base64")}`,
+//             like:i.likes,
+//             chat:i.chats
+//         }));
+
+//         res.json({writes:wr,images:imag,videos:ved});
+//     }
+//     catch(er){
+//         res.status(500).json({message:"Internal server error"});
+//     }
 // })
+
+app.get("/profile-data/:Username", async (req, res) => {
+    try {
+        const usr = req.params.Username;
+
+        const wr = await diddy.find({Username: usr}, {data: 1, likes: 1, chats: 1, _id: 0});
+        const im = await p_diddy.find({Username: usr}, {img: 1, contentType: 1, likes: 1, chats: 1, _id: 0});
+        const vd = await vid.find({Username: usr}, {filename: 1, likes: 1, chats: 1, _id: 0});
+
+        // Convert videos to include URL references instead of actual data
+        const videos = vd.map(v => ({
+            filename: v.filename,
+            url: `${req.protocol}://${req.get('host')}/video/${v.filename}`, // Generate video URL
+            like: v.likes || 0,
+            chat: v.chats || 0
+        }));
+
+        const imag = im.map(i => ({
+            image: `data:${i.contentType};base64,${i.img.toString("base64")}`,
+            like: i.likes,
+            chat: i.chats
+        }));
+
+        res.json({
+            writes: wr,
+            images: imag,
+            videos: videos
+        });
+    } catch (er) {
+        console.error("Profile data error:", er);
+        res.status(500).json({message: "Internal server error"});
+    }
+});
+
+app.get("/default",(req,res)=>{
+    try{
+        res.sendFile(path.join(__dirname, "front", "df.html"));
+    }
+    catch(er){
+        console.error("There was some error sending the default file",er);
+        res.status(500).send("Internal Server Error");
+    }
+})
 
 app.listen(port, '0.0.0.0', () => {
   console.log('Server running');

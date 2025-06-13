@@ -2,3 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom Styles */
+#write_post {
+    font-family: monospace;
+    font-size: 20px;
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Skeleton Loading Animation */
+.skeleton {
+    opacity: 0.7;
+    animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        opacity: 0.7;
+    }
+    
+    100% {
+        opacity: 0.3;
+    }
+}
+
+/* Ensure skeleton background colors show up properly */
+.skeleton .bg-gray-300 {
+    background-color: #d1d5db !important;
+}

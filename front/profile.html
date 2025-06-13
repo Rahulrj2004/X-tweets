@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="../front/pr2.css">
+    <link rel="stylesheet" href="../src/output.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400&display=swap">
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <ul class="bar">
+                <button id="close1"><span class="material-symbols-outlined">
+                        cancel_presentation
+                    </span></button>
+                <li id="home-page"><span class="material-symbols-outlined">home</span> <span>Home</span></li>
+                <li onclick="serve_default()"><span class="material-symbols-outlined"> search </span>
+                    <span>Search</span></li>
+                <li id="profile-page"><span class="material-symbols-outlined">account_circle</span> <span>Profile</span>
+                </li>
+                <li onclick="showNotification()"><span class="material-symbols-outlined">notifications</span>
+                    <span>Notification</span></li>
+                <li onclick="serve_default()"><span class="material-symbols-outlined">chat</span> <span>Chat</span></li>
+                <li onclick="serve_default()"><span class="material-symbols-outlined">more</span> <span>More</span></li>
+            </ul>
+        </div>
+        <!-- Notification Sound -->
+        <audio id="notification-sound" src="../public/notify.mp3" preload="auto"></audio>
+
+        <!-- Toast Notification -->
+        <div id="notification-toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 -translate-y-10 opacity-0 pointer-events-none 
+                            px-4 py-2 text-white font-semibold rounded-xl shadow-xl drop-shadow-lg flex items-center gap-2 
+                            transition-all duration-500 ease-out z-100 
+                            bg-gradient-to-r from-gray-800 via-gray-700 to-gray-900 
+                            ring-1 ring-gray-400/30 backdrop-blur-sm 
+                          overflow-hidden max-sm:left-48 max-sm:top-[580px]">
+
+            <!-- Hidden on small screens -->
+            <span class="material-symbols-outlined text-lg animate-spin shrink-0 text-white drop-shadow max-sm:hidden">
+                notifications
+            </span>
+
+            <!-- Always visible text -->
+            <span class="text-white drop-shadow text-sm max-sm:text-xs z-100">
+                🔔 No new notifications
+            </span>
+        </div>
+
+        <div class="profile-meta">
+            <button id="hamburger"><span class="material-symbols-outlined ">
+                    menu_open
+                </span></button>
+            <h1 id="name" class="username">... ..</h1>
+        </div>
+        <div class="content">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-image">
+                    <img id="DP" src="../public/profile_placeholder.jpg" alt="Profile Picture">
+                </div>
+                <div class="profile-info">
+                    <button class="follow-btn" onclick="toggleFollow()">Follow</button>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <span class="stat-number"><strong>54.2k</strong></span> <span
+                                class="stat-label">followers</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number"><strong>743</strong></span> <span
+                                class="stat-label">following</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <hr>
+            <hr>
+
+            <div class="marquee-container">
+                <div class="marquee-text">
+                    <strong>|| These are the posts ||</strong>
+                </div>
+            </div>
+
+            <!-- Posts Grid -->
+            <div class="posts-grid" id="posts-content">
+                <!-- <div class="post" onclick="openPost(1)">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop"
+                        alt="Post 1">
+                    <div class="post-overlay">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <span>❤️</span> <span>1,234</span>
+                            </div>
+                            <div class="post-stat">
+                                <span>💬</span> <span>56</span>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- <div class="post" onclick="openPost(2)">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=300&h=300&fit=crop"
+                        alt="Post 2">
+                    <div class="post-overlay">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <span>❤️</span> <span>892</span>
+                            </div>
+                            <div class="post-stat">
+                                <span>💬</span> <span>23</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post" onclick="openPost(3)">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=300&h=300&fit=crop"
+                        alt="Post 3">
+                    <div class="post-overlay">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <span>❤️</span> <span>2,156</span>
+                            </div>
+                            <div class="post-stat">
+                                <span>💬</span> <span>78</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post" onclick="openPost(4)">
+                    <img src="https://images.unsplash.com/photo-1502780402662-acc01917949e?w=300&h=300&fit=crop"
+                        alt="Post 4">
+                    <div class="post-overlay">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <span>❤️</span> <span>3,421</span>
+                            </div>
+                            <div class="post-stat">
+                                <span>💬</span> <span>94</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post" onclick="openPost(5)">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=300&h=300&fit=crop&crop=face"
+                        alt="Post 5">
+                    <div class="post-overlay">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <span>❤️</span> <span>1,876</span>
+                            </div>
+                            <div class="post-stat">
+                                <span>💬</span> <span>45</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post" onclick="openPost(6)">
+                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop"
+                        alt="Post 6">
+                    <div class="post-overlay">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <span>❤️</span> <span>967</span>
+                            </div>
+                            <div class="post-stat">
+                                <span>💬</span> <span>31</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post" onclick="openPost(7)">
+                    <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=300&h=300&fit=crop"
+                        alt="Post 7">
+                    <div class="post-overlay">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <span>❤️</span> <span>2,543</span>
+                            </div>
+                            <div class="post-stat">
+                                <span>💬</span> <span>67</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post" onclick="openPost(8)">
+                    <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=300&h=300&fit=crop"
+                        alt="Post 8">
+                    <div class="post-overlay"> 
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <span>❤️</span> <span>1,234</span>
+                            </div>
+                            <div class="post-stat">
+                                <span>💬</span> <span>42</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post" onclick="openPost(9)">
+                    <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=300&h=300&fit=crop"
+                        alt="Post 9">
+                    <div class="post-overlay">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <span>❤️</span> <span>3,876</span>
+                            </div>
+                            <div class="post-stat">
+                                <span>💬</span> <span>123</span>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../front/sc2.js"></script>
+
+</html>

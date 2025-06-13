@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work in Progress</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            font-weight: 900;
+            color: #000;
+            animation: pulse 2s infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid #333;
+        }
+
+        .icon:hover {
+            transform: scale(1.1);
+            background: #000;
+            color: #fff;
+            border-color: #fff;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #1d9bf0;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #8b9dc3;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background-color: #333;
+            border-radius: 2px;
+            margin: 0 auto 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: #1d9bf0;
+            border-radius: 2px;
+            width: 0%;
+            animation: loading 3s ease-in-out infinite;
+        }
+
+        .message {
+            font-size: 18px;
+            color: #8b9dc3;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+            transition: opacity 0.5s ease;
+        }
+
+        .dots {
+            display: inline-block;
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes loading {
+            0% {
+                width: 0%;
+            }
+            50% {
+                width: 70%;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+
+        @keyframes dots {
+            0%, 20% {
+                content: '';
+            }
+            40% {
+                content: '.';
+            }
+            60% {
+                content: '..';
+            }
+            80%, 100% {
+                content: '...';
+            }
+        }
+
+        @media (max-width: 768px) {
+            .icon {
+                font-size: 80px;
+            }
+            .title {
+                font-size: 36px;
+            }
+            .subtitle {
+                font-size: 20px;
+            }
+            .loading-bar {
+                width: 250px;
+            }
+            .message {
+                font-size: 16px;
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon" onclick="iconClick()">𝕏</div>
+        <h1 class="title">Work in Progress</h1>
+        <p class="subtitle">Something amazing is coming soon</p>
+        
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        
+        <p class="message" id="message">
+            We're working hard to bring you something special<span class="dots"></span><br>
+            Thank you for your patience!
+        </p>
+    </div>
+
+    <script>
+        const messages = [
+            "We're working hard to bring you something special...",
+            "Creating magic behind the scenes...🪄🪄",
+            "The best things are worth waiting for...",
+            "The developer is busy sleeping 💤💤"
+        ];
+
+        let currentMessage = 0;
+
+        function iconClick() {
+            const icon = document.querySelector('.icon');
+            const messageEl = document.getElementById('message');
+            
+            // Icon animation
+            icon.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                icon.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    icon.style.transform = 'scale(1)';
+                }, 200);
+            }, 100);
+            
+            // Change message
+            currentMessage = (currentMessage + 1) % messages.length;
+            messageEl.style.opacity = '0';
+            setTimeout(() => {
+                messageEl.innerHTML = messages[currentMessage] + '<span class="dots"></span><br>Thank you for your patience!';
+                messageEl.style.opacity = '1';
+            }, 300);
+        }
+
+        // Auto-change message every 5 seconds
+        setInterval(() => {
+            currentMessage = (currentMessage + 1) % messages.length;
+            const messageEl = document.getElementById('message');
+            messageEl.style.opacity = '0';
+            setTimeout(() => {
+                messageEl.innerHTML = messages[currentMessage] + '<span class="dots"></span><br>Thank you for your patience!';
+                messageEl.style.opacity = '1';
+            }, 500);
+        }, 5000);
+
+        // Add some floating particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = '4px';
+            particle.style.height = '4px';
+            particle.style.background = '#1d9bf0';
+            particle.style.borderRadius = '50%';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.top = '100vh';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '-1';
+            particle.style.opacity = '0.6';
+            
+            document.body.appendChild(particle);
+            
+            const duration = Math.random() * 3000 + 2000;
+            particle.animate([
+                { transform: 'translateY(0px)', opacity: 0.6 },
+                { transform: `translateY(-100vh) translateX(${(Math.random() - 0.5) * 200}px)`, opacity: 0 }
+            ], {
+                duration: duration,
+                easing: 'ease-out'
+            }).onfinish = () => particle.remove();
+        }
+
+        // Create particles occasionally
+        setInterval(createParticle, 800);
+    </script>
+</body>
+</html>
