@@ -16,6 +16,14 @@ let digger = "baba";
 let chigger = "chichi";
 let user_Id;  //user id of the person 
 
+// Pagination variables
+let currentPage = 1;
+let isLoading = false;
+let hasMorePosts = true;
+const postsPerPage = 10;
+let loadedPostIds = new Set(); // Track loaded posts to prevent duplicates
+let observer = null; // Intersection observer for infinite scroll
+
 window.addEventListener("DOMContentLoaded", async (event) => {
     // if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
     //     window.location.href = `${window.location.origin}/`;
@@ -55,13 +63,13 @@ async function written_post(data, chats, repost, likes, views, profileId, userna
 
     const profile = `data:${data1.contentType};base64,${data1.profile}`;
 
-    let html = ` <div class="written_post flex border border-x-0 border-gray-600 fade-in">
+    let html = ` <div class="written_post flex border border-x-0 border-gray-600 fade-in opacity-0 transform translate-y-4">
                     <div class="account my-2 max-sm:w-11">
                         <img src="${profile}" class="rounded-full w-10 h-10 mx-5 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3" alt="">
                     </div>
                     <div class="mx-5"> 
                         <div class=" mx-1">
-                            <span class="font-bold hover:underline my-2 text-sm cursor-pointer">${username}
+                            <span class="font-bold hover:underline my-2 text-sm">${username}
                             </span>
                             <div class="text-sm">poet</div>
                         </div>
@@ -96,7 +104,16 @@ async function written_post(data, chats, repost, likes, views, profileId, userna
                     </div>
                 </div>`
 
-    document.getElementById("posts").insertAdjacentHTML("afterend", html);
+    document.getElementById("posts").insertAdjacentHTML("beforeend", html);
+    
+    // Animate the post in
+    const newPost = document.querySelector('.written_post:last-child');
+    if (newPost) {
+        setTimeout(() => {
+            newPost.classList.remove('opacity-0', 'translate-y-4');
+            newPost.classList.add('opacity-100', 'translate-y-0');
+        }, 10);
+    }
 }
 
 async function video_post(chats, repost, likes, views, profileId, username) {
@@ -119,13 +136,13 @@ async function video_post(chats, repost, likes, views, profileId, username) {
 
     const profile = `data:${data3.contentType};base64,${data3.profile}`;
 
-    let html = `<div class=" flex border border-x-0 border-gray-600 fade-in ">
+    let html = `<div class="video-post flex border border-x-0 border-gray-600 fade-in opacity-0 transform translate-y-4">
     <div class="account my-2 max-sm:w-11">
         <img src="${profile}" class="rounded-full w-10 h-10 mx-5 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3" alt="">
     </div>
     <div class="mx-5">
         <div>
-            <span class="font-bold hover:underline my-2 text-sm cursor-pointer">${username}
+            <span class="font-bold hover:underline my-2 text-sm">${username}
             </span>
             <div class="text-sm">poet</div>
         </div>
@@ -161,7 +178,16 @@ async function video_post(chats, repost, likes, views, profileId, username) {
     </div>
 </div>`
 
-    document.getElementById("posts").insertAdjacentHTML("afterend", html);
+    document.getElementById("posts").insertAdjacentHTML("beforeend", html);
+    
+    // Animate the post in
+    const newPost = document.querySelector('.video-post:last-child');
+    if (newPost) {
+        setTimeout(() => {
+            newPost.classList.remove('opacity-0', 'translate-y-4');
+            newPost.classList.add('opacity-100', 'translate-y-0');
+        }, 10);
+    }
 }
 
 
@@ -225,13 +251,13 @@ async function video_post(chats, repost, likes, views, profileId, username) {
 
 async function image_post(postId, chats, repost, likes, views, username) {
     let html = `
-    <div class="post flex border border-x-0 border-gray-600 max-sm:ml-1 fade-in" id="post-${postId}">
+    <div class="image-post flex border border-x-0 border-gray-600 max-sm:ml-1 fade-in opacity-0 transform translate-y-4" id="post-${postId}">
         <div class="account my-2 max-sm:w-11">
             <div class="DP rounded-full w-10 h-10 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3 mx-5"></div>
         </div>
         <div class="mx-5">
             <div>
-                <span class="font-bold hover:underline my-2 text-sm cursor-pointer">${username}</span>
+                <span class="font-bold hover:underline my-2 text-sm">${username}</span>
                 <div class="text-sm">legend</div>
             </div>
             <div class="postimg my-2 flex justify-evenly">
@@ -267,6 +293,15 @@ async function image_post(postId, chats, repost, likes, views, username) {
     
     document.getElementById("posts").insertAdjacentHTML("beforeend", html);
     
+    // Animate the post in
+    const newPost = document.getElementById(`post-${postId}`);
+    if (newPost) {
+        setTimeout(() => {
+            newPost.classList.remove('opacity-0', 'translate-y-4');
+            newPost.classList.add('opacity-100', 'translate-y-0');
+        }, 10);
+    }
+    
     // Load the actual content
     setTimeout(async () => {
         try {
@@ -291,7 +326,7 @@ async function image_post(postId, chats, repost, likes, views, username) {
         catch (error) {
             console.error("Error loading image post:", error);
         }
-    }, 0);
+    }, 100);
 }
 
 
@@ -408,44 +443,15 @@ async function image_post(postId, chats, repost, likes, views, username) {
 
 
 // main.js
-let currentIndex = 0;
-const batchSize = 5; // Number of posts to load at once
-let isLoading = false;
-let allPosts = [];
-let observer;
+// Old variables removed - now using pagination variables defined above
 
 async function loader() {
     try {
         // Show skeleton screens while loading
-        showSkeletons(batchSize);
-        
-        const [postsResponse, seesResponse, Vidresponse] = await Promise.all([
-            fetch(`${window.location.origin}/get-posts`),
-            fetch(`${window.location.origin}/get-sees`),
-            fetch(`${window.location.origin}/get-vids`)
-        ]);
-
-        const posts = await postsResponse.json();
-        const posts1 = await seesResponse.json();
-        const posts2 = await Vidresponse.json();
-
-        // Combine posts as before
-        let combinedPosts = [];
-        let maxLength = Math.max(posts.length, posts1.length, posts2.length);
-
-        for (let i = 0; i < maxLength; i++) {
-            if (i < posts.length) combinedPosts.push({ type: "written", data: posts[i] });
-            if (i < posts1.length) combinedPosts.push({ type: "image", data: posts1[i] });
-            if (i < posts2.length) combinedPosts.push({ type: "video", data: posts2[i] });
-        }
-
-        allPosts = combinedPosts;
-        
-        // Remove skeletons
-        removeSkeletons();
+        showSkeletons(postsPerPage);
         
         // Load initial batch
-        loadNextBatch();
+        await loadNextBatch();
         
         // Set up intersection observer for infinite scroll
         setupObserver();
@@ -456,87 +462,170 @@ async function loader() {
     }
 }
 
-function loadNextBatch() {
-    if (isLoading || currentIndex >= allPosts.length) return;
+async function loadNextBatch() {
+    if (isLoading || !hasMorePosts) return;
     
     isLoading = true;
-    const endIndex = Math.min(currentIndex + batchSize, allPosts.length);
     
-    // Show skeleton for the next batch while loading
-    showSkeletons(Math.min(batchSize, allPosts.length - currentIndex));
+    // Clear any error messages
+    document.querySelectorAll('.error-message').forEach(el => el.remove());
     
-    // Simulate loading delay (remove in production)
-    setTimeout(() => {
-        for (let i = currentIndex; i < endIndex; i++) {
+    // Show loading indicator for subsequent loads
+    if (currentPage > 1) {
+        showLoadingIndicator();
+    }
+    
+    try {
+        const response = await fetch(`${window.location.origin}/get-all-posts?page=${currentPage}&limit=${postsPerPage}`);
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch posts');
+        }
+        
+        const { textPosts, imagePosts, videoPosts, pagination } = data;
+        
+        // Combine and sort all posts by creation time (newest first)
+        let allPosts = [];
+        
+        // Helper function to extract timestamp from ObjectId
+        function getTimestampFromObjectId(objectId) {
+            // Extract timestamp from ObjectId (first 4 bytes)
+            const timestamp = parseInt(objectId.substring(0, 8), 16) * 1000;
+            return new Date(timestamp);
+        }
+        
+        // Add text posts
+        textPosts.forEach(post => {
+            if (!loadedPostIds.has(post._id)) {
+                allPosts.push({ 
+                    type: "written", 
+                    data: post, 
+                    timestamp: getTimestampFromObjectId(post._id) 
+                });
+                loadedPostIds.add(post._id);
+            }
+        });
+        
+        // Add image posts
+        imagePosts.forEach(post => {
+            if (!loadedPostIds.has(post._id)) {
+                allPosts.push({ 
+                    type: "image", 
+                    data: post, 
+                    timestamp: getTimestampFromObjectId(post._id) 
+                });
+                loadedPostIds.add(post._id);
+            }
+        });
+        
+        // Add video posts
+        videoPosts.forEach(post => {
+            if (!loadedPostIds.has(post._id)) {
+                allPosts.push({ 
+                    type: "video", 
+                    data: post, 
+                    timestamp: getTimestampFromObjectId(post._id) 
+                });
+                loadedPostIds.add(post._id);
+            }
+        });
+        
+        // Sort by timestamp (newest first)
+        allPosts.sort((a, b) => b.timestamp - a.timestamp);
+        
+        // Remove skeletons and loading indicator
+        removeSkeletons();
+        removeLoadingIndicator();
+        
+        // Render posts immediately without delays
+        for (let i = 0; i < allPosts.length; i++) {
             const post = allPosts[i];
+            
             if (post.type === "written") {
-                written_post(post.data.data, post.data.chats, post.data.repost, post.data.likes, post.data.views, post.data._id, post.data.Username);
+                await written_post(post.data.data, post.data.chats, post.data.repost, post.data.likes, post.data.views, post.data._id, post.data.Username);
             }
             else if (post.type === "image") {
-                image_post(post.data._id, post.data.chats, post.data.repost, post.data.likes, post.data.views, post.data.Username);
+                await image_post(post.data._id, post.data.chats, post.data.repost, post.data.likes, post.data.views, post.data.Username);
             }
             else {
-                video_post(post.data.chats, post.data.repost, post.data.likes, post.data.views, post.data._id, post.data.Username);
+                await video_post(post.data.chats, post.data.repost, post.data.likes, post.data.views, post.data._id, post.data.Username);
             }
         }
         
-        removeSkeletons();
-        currentIndex = endIndex;
-        isLoading = false;
+        // Update pagination state
+        hasMorePosts = pagination.hasNextPage;
+        currentPage++;
+        
+        // Show "no more posts" message if no more posts
+        if (!hasMorePosts) {
+            showNoMorePostsMessage();
+        }
         
         // Update observer to watch the new last element
-        if (observer && endIndex < allPosts.length) {
-            const posts = document.querySelectorAll('.post');
-            observer.unobserve(posts[posts.length - 1]);
-            observer.observe(posts[posts.length - 1]);
-        }
-    }, 1000); // Simulated network delay
+        updateObserver();
+        
+    } catch (error) {
+        console.error("Error loading posts:", error);
+        removeSkeletons();
+        removeLoadingIndicator();
+        showErrorMessage("Failed to load posts. Please try again.");
+    } finally {
+        isLoading = false;
+    }
 }
 
 function setupObserver() {
     const options = {
         root: null,
-        rootMargin: '0px',
+        rootMargin: '100px', // Start loading 100px before reaching the end
         threshold: 0.1
     };
     
     observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && !isLoading && hasMorePosts) {
                 loadNextBatch();
             }
         });
     }, options);
     
-    const posts = document.querySelectorAll('.post');
+    updateObserver();
+}
+
+function updateObserver() {
+    const posts = document.querySelectorAll('.post, .written_post, .image-post, .video-post');
     if (posts.length > 0) {
-        observer.observe(posts[posts.length - 1]);
+        // Observe the new last element
+        const lastPost = posts[posts.length - 1];
+        if (lastPost && observer) {
+            observer.observe(lastPost);
+        }
     }
 }
 
 // Skeleton screen functions
-
 function showSkeletons(count) {
     const postsContainer = document.getElementById("posts");
     for (let i = 0; i < count; i++) {
         const skeletonHtml = `
             <div class="post flex border border-x-0 border-gray-600 max-sm:ml-1 skeleton">
                 <div class="account my-2 max-sm:w-11">
-                    <div class="DP rounded-full w-10 h-10 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3 mx-5 bg-gray-300"></div>
+                    <div class="DP rounded-full w-10 h-10 max-sm:min-w-8 max-sm:min-h-8 max-sm:mx-3 mx-5 bg-gray-300 animate-pulse"></div>
                 </div>
                 <div class="mx-5 flex-1">
                     <div class="mb-4">
-                        <div class="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
-                        <div class="h-3 bg-gray-300 rounded w-1/2"></div>
+                        <div class="h-4 bg-gray-300 rounded w-1/4 mb-2 animate-pulse"></div>
+                        <div class="h-3 bg-gray-300 rounded w-1/2 animate-pulse"></div>
                     </div>
                     <div class="postimg my-2">
-                        <div class="bg-gray-300 rounded-md h-64 w-full"></div>
+                        <div class="bg-gray-300 rounded-md h-64 w-full animate-pulse"></div>
                     </div>
                     <div class="icons flex gap-8 text-sm m-3">
-                        <div class="h-3 bg-gray-300 rounded w-8"></div>
-                        <div class="h-3 bg-gray-300 rounded w-8"></div>
-                        <div class="h-3 bg-gray-300 rounded w-8"></div>
-                        <div class="h-3 bg-gray-300 rounded w-8"></div>
+                        <div class="h-3 bg-gray-300 rounded w-8 animate-pulse"></div>
+                        <div class="h-3 bg-gray-300 rounded w-8 animate-pulse"></div>
+                        <div class="h-3 bg-gray-300 rounded w-8 animate-pulse"></div>
+                        <div class="h-3 bg-gray-300 rounded w-8 animate-pulse"></div>
                     </div>
                 </div>
             </div>
@@ -549,10 +638,56 @@ function removeSkeletons() {
     document.querySelectorAll('.skeleton').forEach(el => el.remove());
 }
 
+function showLoadingIndicator() {
+    const postsContainer = document.getElementById("posts");
+    const loadingHtml = `
+        <div class="loading-indicator flex justify-center items-center py-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+            <span class="ml-2 text-gray-400">Loading more posts...</span>
+        </div>
+    `;
+    postsContainer.insertAdjacentHTML("beforeend", loadingHtml);
+}
+
+function removeLoadingIndicator() {
+    document.querySelectorAll('.loading-indicator').forEach(el => el.remove());
+}
+
+function showNoMorePostsMessage() {
+    const postsContainer = document.getElementById("posts");
+    const noMorePostsHtml = `
+        <div class="no-more-posts flex justify-center items-center py-8 text-gray-500">
+            <span class="text-center">
+                <div class="text-2xl mb-2">📭</div>
+                <div class="text-sm">No more posts to load</div>
+                <div class="text-xs mt-1">You've reached the end of the feed</div>
+            </span>
+        </div>
+    `;
+    postsContainer.insertAdjacentHTML("beforeend", noMorePostsHtml);
+}
+
+function showErrorMessage(message) {
+    const postsContainer = document.getElementById("posts");
+    const errorHtml = `
+        <div class="error-message flex justify-center items-center py-4 text-red-500">
+            <span class="text-center">
+                <div class="text-sm">❌ ${message}</div>
+                <button onclick="loadNextBatch()" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs">
+                    Retry
+                </button>
+            </span>
+        </div>
+    `;
+    postsContainer.insertAdjacentHTML("beforeend", errorHtml);
+}
+
 loader();
 
 write1.addEventListener("keydown", async function (event) {
     if (event.key === "Enter") {
+        vibrateOnClick(); // Add vibration feedback
+        
         let data = write1.value.trim();
         if (data === "") return;
 
@@ -592,11 +727,15 @@ write1.addEventListener("keydown", async function (event) {
 })
 
 close1.addEventListener("click", () => {
+    vibrateOnClick(); // Add vibration feedback
     popup.classList.add("hidden");
+    enablePostsTouch(); // Re-enable touch on posts when popup closes
 })
 
 img_post.addEventListener("click", () => {
+    vibrateOnClick(); // Add vibration feedback
     popup.classList.remove("hidden");
+    disablePostsTouch(); // Disable touch on posts when popup opens
 })
 
 function getImage(input) {
@@ -660,14 +799,26 @@ img_post1.addEventListener("click", async function () {
     }
 
     popup.classList.add("hidden");
+    enablePostsTouch(); // Re-enable touch on posts when popup closes
 })
 
 close2.addEventListener("click", () => {
+    vibrateOnClick(); // Add vibration feedback
     first.classList.replace("max-sm:translate-x-[100px]", "max-sm:translate-x-[-80px]");
+    enablePostsTouch(); // Re-enable touch on posts when sidebar closes
+})
+
+// Add close button functionality for close1
+close1.addEventListener("click", () => {
+    vibrateOnClick(); // Add vibration feedback
+    first.classList.replace("max-sm:translate-x-[100px]", "max-sm:translate-x-[-80px]");
+    enablePostsTouch(); // Re-enable touch on posts when sidebar closes
 })
 
 hamburger.addEventListener("click", () => {
+    vibrateOnClick(); // Add vibration feedback
     first.classList.replace("max-sm:translate-x-[-80px]", "max-sm:translate-x-[100px]");
+    disablePostsTouch(); // Disable touch on posts when sidebar opens
 })
 
 
@@ -708,24 +859,62 @@ const iconConfig = {
     }
 };
 
+// Mobile vibration function
+function vibrateOnClick() {
+    if ('vibrate' in navigator) {
+        navigator.vibrate(50); // 50ms vibration
+    }
+}
+
+// Enhanced toggle function with vibration
 function toggleIcon(element, iconType) {
-    const iconElement = element.querySelector(`.${iconType}-icon`);
-
-    const isActive = element.classList.contains('active');
-
-    if (!isActive) {
+    vibrateOnClick(); // Add vibration feedback
+    
+    const iconElement = element.querySelector('.icon-symbol');
+    const countElement = element.querySelector('span:last-child');
+    
+    // Toggle active class for clicked element
+    element.classList.toggle('active');
+    
+    // Update the icon SVG based on state
+    if (element.classList.contains('active')) {
         iconElement.innerHTML = iconConfig[iconType].activeIcon;
-        element.classList.add('active');
-
+        // Add color classes
         if (iconType === 'comment') element.classList.add('text-blue-400');
         if (iconType === 'repost') element.classList.add('text-green-500');
         if (iconType === 'like') element.classList.add('text-red-500');
         if (iconType === 'view') element.classList.add('text-blue-500');
     } else {
         iconElement.innerHTML = iconConfig[iconType].inactive;
-        element.classList.remove('active');
-
+        // Remove color classes
         element.classList.remove('text-blue-400', 'text-green-500', 'text-red-500', 'text-blue-500');
+    }
+    
+    // Update count based on icon type
+    let currentCount = parseInt(countElement.textContent.replace(/[^\d]/g, ''));
+    
+    if (element.classList.contains('active')) {
+        // Increment count
+        if (iconType === 'like') {
+            countElement.textContent = `${currentCount + 1}k`;
+        } else if (iconType === 'comment') {
+            countElement.textContent = currentCount + 1;
+        } else if (iconType === 'repost') {
+            countElement.textContent = currentCount + 1;
+        } else if (iconType === 'view') {
+            countElement.textContent = `${currentCount + 1}k`;
+        }
+    } else {
+        // Decrement count
+        if (iconType === 'like') {
+            countElement.textContent = `${Math.max(0, currentCount - 1)}k`;
+        } else if (iconType === 'comment') {
+            countElement.textContent = Math.max(0, currentCount - 1);
+        } else if (iconType === 'repost') {
+            countElement.textContent = Math.max(0, currentCount - 1);
+        } else if (iconType === 'view') {
+            countElement.textContent = `${Math.max(0, currentCount - 1)}k`;
+        }
     }
 }
 
@@ -748,16 +937,19 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 profile_page.addEventListener("click",()=>{
+    vibrateOnClick(); // Add vibration feedback
     // const userID = new URLSearchParams(window.location.search).get("userID");
     window.location.href = `${window.location.origin}/person-profile/${user_Id}`;
 })
 
 home_page.addEventListener("click",()=>{
+    vibrateOnClick(); // Add vibration feedback
     window.location.href = `${window.location.origin}/home-X?userID=${user_Id}`;
 })
 
 
 function serve_default(){
+    vibrateOnClick(); // Add vibration feedback
     try{
         window.location.href =`${window.location.origin}/default`;
     }
@@ -767,6 +959,8 @@ function serve_default(){
     }
 }
 function showNotification() {
+    vibrateOnClick(); // Add vibration feedback when notification is clicked
+    
     const toast = document.getElementById("notification-toast");
     const sound = document.getElementById("notification-sound");
 
@@ -787,3 +981,56 @@ function showNotification() {
         toast.classList.add("opacity-0", "pointer-events-none", "-translate-y-10");
     }, 2500);
 }
+
+// Function to disable touch events on posts area
+function disablePostsTouch() {
+    const postsContainer = document.getElementById("posts");
+    const scrollContainer = document.getElementById("scroll-container");
+    
+    if (postsContainer) {
+        postsContainer.classList.add("posts-touch-disabled");
+        postsContainer.classList.remove("posts-touch-enabled");
+    }
+    if (scrollContainer) {
+        scrollContainer.classList.add("posts-touch-disabled");
+        scrollContainer.classList.remove("posts-touch-enabled");
+    }
+    
+    // Prevent body scrolling
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+}
+ 
+// Function to enable touch events on posts area
+function enablePostsTouch() {
+    const postsContainer = document.getElementById("posts");
+    const scrollContainer = document.getElementById("scroll-container");
+    
+    if (postsContainer) {
+        postsContainer.classList.remove("posts-touch-disabled");
+        postsContainer.classList.add("posts-touch-enabled");
+    }
+    if (scrollContainer) {
+        scrollContainer.classList.remove("posts-touch-disabled");
+        scrollContainer.classList.add("posts-touch-enabled");
+    }
+    
+    // Re-enable body scrolling
+    document.body.style.overflow = "auto";
+    document.documentElement.style.overflow = "auto";
+}
+
+// Add click event listener to popup background to close popup when clicking outside
+document.addEventListener('DOMContentLoaded', function() {
+    const popup = document.getElementById("popup");
+    if (popup) {
+        popup.addEventListener("click", function(e) {
+            // Close popup if clicking on the background (not the popup content)
+            if (e.target === popup) {
+                vibrateOnClick(); // Add vibration feedback
+                popup.classList.add("hidden");
+                enablePostsTouch(); // Re-enable touch on posts when popup closes
+            }
+        });
+    }
+});

@@ -13,7 +13,7 @@
 
 <body class="bg-black text-white">
     <div class="flex container my-4 ">
-        <div class="first ml-24 max-sm:ml-0 max-sm:translate-x-[-80px] fixed top-0 w-[20%] max-sm:z-20 transition-transform duration-500 ease-in-out"
+        <div class="first max-sm:ml-0 max-sm:translate-x-[-80px] fixed top-0 w-[20%] max-sm:z-50 transition-transform duration-500 ease-in-out bg-black"
             id="first">
             <div class="logo invert my-3 max-sm:hidden">
                 <svg viewBox="0 0 24 24" aria-="true"
@@ -22,13 +22,13 @@
                         <path
                             d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z">
                         </path>
-                    </g>
+                    </g>  
                 </svg>
             </div>
 
             <div class="sidebar flex items-end flex-col">
                 <ul class="flex flex-col text-xl space-y-5 px-11 max-sm:px-0 max-sm:bg-black rounded-lg">
-                    <li class="md:w-fit px-3 py-2 max-sm:mb-3 hidden max-sm:!block cursor-pointer hover:text-blue-500">
+                    <li class="md:w-fit px-3 py-2 max-sm:mb-3 hidden max-sm:block cursor-pointer hover:text-blue-500">
                         <button id="close1"><span class="material-symbols-outlined text-4xl relative left-28">
                                 cancel_presentation
                             </span></button>
@@ -104,7 +104,7 @@
         </div>
         <div
             class="second max-sm:w-full max-sm:ml-0 ml-[25%] border-[1px] border-x-gray-700 overflow-y-auto border-y-black w-[43%] max-sm:overflow-x-hidden">
-            <div class="top flex p-4 fixed top-0 bg-black mb-6 w-[43%] max-sm:w-full">
+            <div class="top flex p-4 fixed top-0 bg-black mb-6 w-[43%] max-sm:w-full z-40">
                 <button id="hamburger"><span class="material-symbols-outlined hidden max-sm:block max-sm:mx-2">
                         menu_open
                     </span></button>
@@ -178,7 +178,7 @@
                                 <div class="comment-btn flex items-center cursor-pointer gap-1 hover:text-blue-400"
                                     onclick="toggleIcon(this, 'comment')">
                                     <span class="icon-symbol comment-icon"></span>
-                                    <span>1.2k</span>
+                                    <span>1.2</span>
                                 </div>
 
                                 <div class="repost-btn flex items-center cursor-pointer gap-1 hover:text-green-500"
@@ -263,7 +263,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> 
             </div>
         </div>
         <div class="third w-full md:ml-[70%] fixed top-0 max-sm:hidden">
@@ -313,7 +313,7 @@
         </div>
     </div>
     <div id="popup"
-        class="w-full h-full fixed z-50 top-0 flex justify-center items-center hidden bg-gray-800 opacity-90">
+        class="w-full h-full fixed z-[1002] top-0 flex justify-center items-center hidden bg-gray-800 opacity-90">
         <div class=" w-[40%] h-[30%] bg-black p-4 rounded-xl max-sm:w-full max-sm:h-[500px]">
             <button id="close"><span class="material-symbols-outlined">
                     close
@@ -335,6 +335,7 @@
                     <br>
                     <button id="img-post1"
                         class="bg-gray-300 text-black px-10 rounded-full py-1 m-2 max-sm:fixed max-sm:right-[110px] max-sm:top-[500px]">Post</button>
+
                 </div>
             </div>
         </div>

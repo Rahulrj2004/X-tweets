@@ -21,9 +21,9 @@ const app = express();
 const port = process.env.PORT||4000;
 async function connectDB() {
     try {
-        await mongoose.connect("mongodb+srv://mr_unknown:unknown@cluster0.fboxd.mongodb.net/Twitter?retryWrites=true&w=majority&appName=cluster0");
-        // await mongoose.connect("mongodb://localhost:27017/Twitter");
-        console.log("Connected to the database");
+        // await mongoose.connect("mongodb+srv://mr_unknown:unknown@cluster0.fwboxd.mongodb.net/Twitter?retryWrites=true&w=majority&appName=cluster0");
+        await mongoose.connect("mongodb://localhost:27017/Twitter");
+        console.log("Connected to the database"); 
     }
     catch (e) {
         console.error("There was some error connecting to database", e);
@@ -85,37 +85,138 @@ app.get("/home-X",(req,res)=>{
 
 app.get("/get-posts", async (req, res) => {
     try {
-        const posts = await diddy.find();
-        res.json(posts);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        
+        const posts = await diddy.find()
+            .sort({ _id: -1 }) // Sort by newest first using _id (contains timestamp)
+            .skip(skip)
+            .limit(limit);
+            
+        const totalPosts = await diddy.countDocuments();
+        const totalPages = Math.ceil(totalPosts / limit);
+        
+        res.json({
+            posts,
+            pagination: {
+                currentPage: page,
+                totalPages,
+                totalPosts,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1
+            }
+        });
     }
     catch (er) {
         console.error("Error fetching post data:", er);
         res.status(500).json({ error: "Failed to fetch posts" });
     }
-
 })
 
 app.get("/get-vids", async (req, res) => {
     try {
-        const posts = await vid.find();
-        res.json(posts);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        
+        const posts = await vid.find()
+            .sort({ _id: -1 }) // Sort by newest first using _id (contains timestamp)
+            .skip(skip)
+            .limit(limit);
+            
+        const totalPosts = await vid.countDocuments();
+        const totalPages = Math.ceil(totalPosts / limit);
+        
+        res.json({
+            posts,
+            pagination: {
+                currentPage: page,
+                totalPages,
+                totalPosts,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1
+            }
+        });
     }
     catch (er) {
         console.error("Error fetching post data:", er);
         res.status(500).json({ error: "Failed to fetch posts" });
     }
-
 })
 
 app.get("/get-sees",async(req,res)=>{
     try{
-        const posts = await p_diddy.find();
-        res.json(posts);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        
+        const posts = await p_diddy.find()
+            .sort({ _id: -1 }) // Sort by newest first using _id (contains timestamp)
+            .skip(skip)
+            .limit(limit);
+            
+        const totalPosts = await p_diddy.countDocuments();
+        const totalPages = Math.ceil(totalPosts / limit);
+        
+        res.json({
+            posts,
+            pagination: {
+                currentPage: page,
+                totalPages,
+                totalPosts,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1
+            }
+        });
     }
     catch(er)
     {
         console.error("There was error getting the images",er);
         res.status(500).json({error:"Failed to fetch posts"});
+    }
+})
+
+// New combined endpoint for better performance
+app.get("/get-all-posts", async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        
+        // Get posts from all three collections with pagination
+        const [textPosts, imagePosts, videoPosts] = await Promise.all([
+            diddy.find().sort({ _id: -1 }).skip(skip).limit(limit),
+            p_diddy.find().sort({ _id: -1 }).skip(skip).limit(limit),
+            vid.find().sort({ _id: -1 }).skip(skip).limit(limit)
+        ]);
+        
+        // Get total counts for pagination
+        const [totalTextPosts, totalImagePosts, totalVideoPosts] = await Promise.all([
+            diddy.countDocuments(),
+            p_diddy.countDocuments(),
+            vid.countDocuments()
+        ]);
+        
+        const totalPosts = totalTextPosts + totalImagePosts + totalVideoPosts;
+        const totalPages = Math.ceil(totalPosts / limit);
+        
+        res.json({
+            textPosts,
+            imagePosts,
+            videoPosts,
+            pagination: {
+                currentPage: page,
+                totalPages,
+                totalPosts,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1
+            }
+        });
+    }
+    catch (er) {
+        console.error("Error fetching combined posts:", er);
+        res.status(500).json({ error: "Failed to fetch posts" });
     }
 })
 
@@ -404,10 +505,34 @@ app.get("/person-profile/:userID",(req,res)=>{
 app.get("/profile-data/:Username", async (req, res) => {
     try {
         const usr = req.params.Username;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
 
-        const wr = await diddy.find({Username: usr}, {data: 1, likes: 1, chats: 1, _id: 0});
-        const im = await p_diddy.find({Username: usr}, {img: 1, contentType: 1, likes: 1, chats: 1, _id: 0});
-        const vd = await vid.find({Username: usr}, {filename: 1, likes: 1, chats: 1, _id: 0});
+        const [wr, im, vd] = await Promise.all([
+            diddy.find({Username: usr}, {data: 1, likes: 1, chats: 1, _id: 0})
+                .sort({ _id: -1 })
+                .skip(skip)
+                .limit(limit),
+            p_diddy.find({Username: usr}, {img: 1, contentType: 1, likes: 1, chats: 1, _id: 0})
+                .sort({ _id: -1 })
+                .skip(skip)
+                .limit(limit),
+            vid.find({Username: usr}, {filename: 1, likes: 1, chats: 1, _id: 0})
+                .sort({ _id: -1 })
+                .skip(skip)
+                .limit(limit)
+        ]);
+
+        // Get total counts for pagination
+        const [totalWrites, totalImages, totalVideos] = await Promise.all([
+            diddy.countDocuments({Username: usr}),
+            p_diddy.countDocuments({Username: usr}),
+            vid.countDocuments({Username: usr})
+        ]);
+
+        const totalPosts = totalWrites + totalImages + totalVideos;
+        const totalPages = Math.ceil(totalPosts / limit);
 
         // Convert videos to include URL references instead of actual data
         const videos = vd.map(v => ({
@@ -426,7 +551,14 @@ app.get("/profile-data/:Username", async (req, res) => {
         res.json({
             writes: wr,
             images: imag,
-            videos: videos
+            videos: videos,
+            pagination: {
+                currentPage: page,
+                totalPages,
+                totalPosts,
+                hasNextPage: page < totalPages,
+                hasPrevPage: page > 1
+            }
         });
     } catch (er) {
         console.error("Profile data error:", er);
@@ -444,6 +576,6 @@ app.get("/default",(req,res)=>{
     }
 })
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port,'0.0.0.0', () => {
   console.log('Server running');
 });
